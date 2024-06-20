@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="../build/DigitalNotes.API.props" />
-</Project>
