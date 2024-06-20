@@ -1,0 +1,17 @@
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Application.deps.json
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Application.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Application.pdb
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Domain.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Infrastructure.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Infrastructure.pdb
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/bin/Debug/net8.0/DigitalNotes.Domain.pdb
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.csproj.AssemblyReference.cache
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.GeneratedMSBuildEditorConfig.editorconfig
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.AssemblyInfoInputs.cache
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.AssemblyInfo.cs
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.csproj.CoreCompileInputs.cache
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalN.0DB4ABC1.Up2Date
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/refint/DigitalNotes.Application.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/DigitalNotes.Application.pdb
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Application/obj/Debug/net8.0/ref/DigitalNotes.Application.dll

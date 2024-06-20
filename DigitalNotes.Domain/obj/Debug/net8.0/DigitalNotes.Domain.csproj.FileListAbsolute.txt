@@ -1,0 +1,11 @@
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/bin/Debug/net8.0/DigitalNotes.Domain.deps.json
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/bin/Debug/net8.0/DigitalNotes.Domain.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/bin/Debug/net8.0/DigitalNotes.Domain.pdb
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/DigitalNotes.Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/DigitalNotes.Domain.AssemblyInfoInputs.cache
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/DigitalNotes.Domain.AssemblyInfo.cs
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/DigitalNotes.Domain.csproj.CoreCompileInputs.cache
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/DigitalNotes.Domain.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/refint/DigitalNotes.Domain.dll
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/DigitalNotes.Domain.pdb
+/Users/BF3774/Repos/RandomSolutions/DigitalNotes/DigitalNotes.Domain/obj/Debug/net8.0/ref/DigitalNotes.Domain.dll
