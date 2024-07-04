@@ -22,6 +22,11 @@ export default function Home() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | undefined>(undefined);
 
+  //pagination
+  const rowsPerPage = 5;
+  const [startIndex, setStartIndex] = useState(0);
+  const [endIndex, setEndIndex] = useState(rowsPerPage);
+
   const fetchNotes = async (query: string): Promise<void> => {
     const noteService = new NoteService();
     const lastRowNumber = await noteService.getLastRowNumber("user2");
@@ -78,7 +83,7 @@ export default function Home() {
           <div className="flex-grow overflow-y-auto">
             {notes.length > 0 ? (
               <>
-                {notes.slice(0, 10).map((note, idx) => {
+                {notes.slice(startIndex, endIndex).map((note, idx) => {
                   return (
                     <NoteRow
                       note={note}
@@ -95,20 +100,56 @@ export default function Home() {
             )}
           </div>
 
-          <div className="flex-grow-0">
+          <div className="flex-grow-0 mb-3">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious href="#" />
+                  <PaginationPrevious
+                    href="#"
+                    className={
+                      startIndex === 0
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                    onClick={() => {
+                      setStartIndex(startIndex - rowsPerPage);
+                      setEndIndex(endIndex - rowsPerPage);
+                    }}
+                  />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationLink href="#">1</PaginationLink>
+                  <PaginationLink
+                    href="#"
+                    className={
+                      startIndex === 0
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                    isActive={startIndex === 0}
+                    onClick={() => {
+                      setStartIndex(0);
+                      setEndIndex(rowsPerPage);
+                    }}
+                  >
+                    1
+                  </PaginationLink>
                 </PaginationItem>
                 <PaginationItem>
                   <PaginationEllipsis />
                 </PaginationItem>
                 <PaginationItem>
-                  <PaginationNext href="#" />
+                  <PaginationNext
+                    href="#"
+                    className={
+                      endIndex >= notes.length
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                    onClick={() => {
+                      setStartIndex(startIndex + rowsPerPage);
+                      setEndIndex(endIndex + rowsPerPage);
+                    }}
+                  />
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
