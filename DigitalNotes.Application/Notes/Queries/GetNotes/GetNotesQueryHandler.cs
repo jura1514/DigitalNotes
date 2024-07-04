@@ -15,7 +15,8 @@ public class GetNotesQueryHandler : IRequestHandler<GetNotesQuery, IReadOnlyColl
     public async Task<IReadOnlyCollection<NoteDto>> Handle(GetNotesQuery request, CancellationToken cancellationToken)
     {
         var notes =
-            await _notesRepository.GetPaginatedAsync(request.CreatedBy, request.LastRowNumber, 5, cancellationToken);
+            await _notesRepository.GetPaginatedAsync(request.CreatedBy, request.LastRowNumber, 10,
+                request.NoteNameQuery, cancellationToken);
 
         var list = new List<NoteDto>();
         foreach (var noteEntity in notes)

@@ -6,4 +6,6 @@ public class GetNotesQuery : IRequest<IReadOnlyCollection<NoteDto>>
 {
     public required string CreatedBy { get; init; }
     public int LastRowNumber { get; init; }
+    
+    public string? NoteNameQuery { get; init; }
 }

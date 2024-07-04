@@ -26,15 +26,21 @@ internal class NotesRepository : INotesRepository
 
     public Task<int?> GetLastRowNumberAsync(string createdBy, CancellationToken cancellationToken)
     {
-        return GetLastCreatedOrUpdatedNotesQuery(createdBy)
+        return _digitalNotesDbContext.NotesView
+            .Where(nw => nw.CreatedBy == createdBy)
             .Select(nw => nw.RowNumber)
-            .FirstOrDefaultAsync(cancellationToken);
+            .MaxAsync(cancellationToken);
     }
 
     public Task<List<NoteView>> GetPaginatedAsync(string createdBy, int lastRowNumber, int pageSize,
-        CancellationToken cancellationToken)
+        string? noteNameQuery, CancellationToken cancellationToken)
     {
-        return GetLastCreatedOrUpdatedNotesQuery(createdBy)
+        var query = GetLastCreatedOrUpdatedNotesQuery(createdBy);
+
+        if (!string.IsNullOrEmpty(noteNameQuery))
+            query = query.Where(nw => nw.Title.Contains(noteNameQuery));
+
+        return query
             .Where(nw => nw.RowNumber <= lastRowNumber)
             .Take(pageSize).ToListAsync(cancellationToken);
     }
@@ -48,8 +54,6 @@ internal class NotesRepository : INotesRepository
     {
         return _digitalNotesDbContext.NotesView
             .Where(nw => nw.CreatedBy == createdBy)
-            .OrderBy(nw => nw.UpdatedAt == null)
-            .ThenByDescending(nw => nw.UpdatedAt)
-            .ThenByDescending(nw => nw.CreatedAt);
+            .OrderByDescending(nw => nw.UpdatedAt ?? nw.CreatedAt);
     }
 }

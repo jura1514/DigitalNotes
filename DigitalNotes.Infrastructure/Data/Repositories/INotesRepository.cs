@@ -9,7 +9,7 @@ public interface INotesRepository
 
     Task<int?> GetLastRowNumberAsync(string createdBy, CancellationToken cancellationToken);
 
-    Task<List<NoteView>> GetPaginatedAsync(string createdBy, int lastRowNumber, int pageSize,
+    Task<List<NoteView>> GetPaginatedAsync(string createdBy, int lastRowNumber, int pageSize, string? noteNameQuery,
         CancellationToken cancellationToken);
 
     Task SaveChangesAsync(CancellationToken cancellationToken);

@@ -38,8 +38,11 @@ public static class NoteEndpoints
 
         // TODO: move?
         group.MapGet("/{createdBy}/{lastRowNumber:int}",
-                async (ISender sender, string createdBy, int lastRowNumber, CancellationToken ct) =>
-                    await sender.Send(new GetNotesQuery {LastRowNumber = lastRowNumber, CreatedBy = createdBy}, ct))
+                async (ISender sender, string createdBy, int lastRowNumber, string? noteNameQuery,
+                        CancellationToken ct) =>
+                    await sender.Send(
+                        new GetNotesQuery
+                            {LastRowNumber = lastRowNumber, CreatedBy = createdBy, NoteNameQuery = noteNameQuery}, ct))
             .WithName("GetNotes")
             .ProducesGet<IReadOnlyCollection<NoteDto>>();
 
