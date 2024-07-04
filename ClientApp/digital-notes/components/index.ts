@@ -1,3 +1,12 @@
+export {
+    Pagination,
+    PaginationContent,
+    PaginationEllipsis,
+    PaginationItem,
+    PaginationLink,
+    PaginationNext,
+    PaginationPrevious
+} from "@/components/ui/pagination";
 export { Header } from "./header";
 export { Sidebar } from "./sidebar";
 export { Button, buttonVariants } from "./ui/button";
@@ -21,6 +30,5 @@ export {
 } from "./ui/form";
 export { Input } from "./ui/input";
 export { Label } from "./ui/label";
-export { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "./ui/resizable";
 export { Textarea } from "./ui/textarea";
 

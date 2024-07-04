@@ -5,16 +5,24 @@ class NoteService {
   private noteEndpoint: string = "note";
   private apiClient: ApiClient = new ApiClient();
 
-  createNote(payload: CreateNotePayload): Promise<string> {
+  create(payload: CreateNotePayload): Promise<string> {
     return this.apiClient.post(this.noteEndpoint, payload);
   }
 
-  updateNote(id: string, payload: UpdateNotePayload): Promise<void> {
+  update(id: string, payload: UpdateNotePayload): Promise<void> {
     return this.apiClient.put(`${this.noteEndpoint}/${id}`, payload);
   }
 
-  getAll(createdBy: string, lastRowNumber: number): Promise<Note[]> {
-    return this.apiClient.get(`${this.noteEndpoint}/${createdBy}/${lastRowNumber}`);
+  getAll(
+    createdBy: string,
+    lastRowNumber: number,
+    query: string | undefined = undefined
+  ): Promise<Note[]> {
+    let endpoint = `${this.noteEndpoint}/${createdBy}/${lastRowNumber}`;
+    if (query && query !== "") {
+      endpoint += `?noteNameQuery=${query}`;
+    }
+    return this.apiClient.get(endpoint);
   }
 
   getLastRowNumber(createdBy: string): Promise<number> {

@@ -56,23 +56,28 @@ function NoteForm({ fetchNotes, selectedNote }: NoteFormInput) {
     if (selectedNote && selectedNote.id) {
       form.setValue("title", selectedNote.title);
       form.setValue("content", selectedNote.content);
+    } else if (
+      form.getValues().title !== "" ||
+      form.getValues().content !== ""
+    ) {
+      form.reset();
     }
   }, [selectedNote, form]);
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { title, content } = values;
     if (selectedNote && selectedNote.id) {
-      await noteService.updateNote(selectedNote.id, {
+      await noteService.update(selectedNote.id, {
         title,
         content,
         id: selectedNote.id,
       });
     } else {
-      await noteService.createNote({ title, content, createdBy: "user2" });
+      await noteService.create({ title, content, createdBy: "user2" });
+      form.reset();
     }
 
     await fetchNotes();
-    form.reset();
   }
 
   return (
