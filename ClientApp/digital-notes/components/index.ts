@@ -8,6 +8,9 @@ export {
     PaginationPrevious
 } from "@/components/ui/pagination";
 export { Header } from "./header";
+export { NoteList } from "./noteList";
+export { PaginationComponent } from "./pagination";
+export { SearchBar } from "./searchBar";
 export { Sidebar } from "./sidebar";
 export { Button, buttonVariants } from "./ui/button";
 export {
