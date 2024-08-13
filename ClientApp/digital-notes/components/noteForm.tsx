@@ -25,11 +25,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 interface NoteFormInput {
-  fetchNotes: () => Promise<void>;
+  onFormSubmit: () => Promise<void>;
   selectedNote?: Note;
 }
 
-function NoteForm({ fetchNotes, selectedNote }: NoteFormInput) {
+function NoteForm({ onFormSubmit, selectedNote }: NoteFormInput) {
   const noteService: NoteService = new NoteService();
 
   const formSchema = z.object({
@@ -77,7 +77,7 @@ function NoteForm({ fetchNotes, selectedNote }: NoteFormInput) {
       form.reset();
     }
 
-    await fetchNotes();
+    await onFormSubmit();
   }
 
   return (

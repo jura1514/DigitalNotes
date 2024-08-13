@@ -50,6 +50,10 @@ export default function Home() {
     setQuery(event.target.value);
   };
 
+  const onNoteFormSubmit = async () => {
+    setPageNumber(1);
+  };
+
   return (
     <main>
       <div className="flex">
@@ -157,7 +161,7 @@ export default function Home() {
 
         <div className="w-full">
           <NoteForm
-            fetchNotes={() => fetchNotes(pageNumber, query)}
+            onFormSubmit={onNoteFormSubmit}
             selectedNote={selectedNote}
           />
         </div>
