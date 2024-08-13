@@ -2,7 +2,6 @@ namespace DigitalNotes.Domain.Entities;
 
 public class NoteView
 {
-    public int? RowNumber { get; init; }
     public required Guid Id { get; init; }
     public required string Title { get; init; }
     public string? Content { get; init; }

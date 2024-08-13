@@ -19,3 +19,8 @@ export interface Note {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface Notes {
+  totalCount: number;
+  notes: Note[];
+}

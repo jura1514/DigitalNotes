@@ -1,5 +1,5 @@
 import ApiClient from "./apiClient";
-import { CreateNotePayload, Note, UpdateNotePayload } from "./types";
+import { CreateNotePayload, Notes, UpdateNotePayload } from "./types";
 
 class NoteService {
   private noteEndpoint: string = "note";
@@ -15,18 +15,16 @@ class NoteService {
 
   getAll(
     createdBy: string,
-    lastRowNumber: number,
+    pageNumber: number,
+    pageSize: number,
     query: string | undefined = undefined
-  ): Promise<Note[]> {
-    let endpoint = `${this.noteEndpoint}/${createdBy}/${lastRowNumber}`;
+  ): Promise<Notes> {
+    let endpoint = `${this.noteEndpoint}/${createdBy}?pageNumber=${pageNumber}&pageSize=${pageSize}`;
+
     if (query && query !== "") {
-      endpoint += `?noteNameQuery=${query}`;
+      endpoint += `&noteNameQuery=${query}`;
     }
     return this.apiClient.get(endpoint);
-  }
-
-  getLastRowNumber(createdBy: string): Promise<number> {
-    return this.apiClient.get(`${this.noteEndpoint}/${createdBy}`);
   }
 }
 

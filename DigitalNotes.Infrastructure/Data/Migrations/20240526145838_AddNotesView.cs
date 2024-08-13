@@ -13,7 +13,7 @@ namespace DigitalNotes.Infrastructure.Data.Migrations
         {
             if (migrationBuilder.IsNpgsql())
             {
-                migrationBuilder.Sql(@"CREATE VIEW View_Notes AS SELECT row_number() OVER () AS ""RowNumber"",
+                migrationBuilder.Sql(@"CREATE VIEW View_Notes AS SELECT
                                         ""Title"",
                                         ""Content"",
                                         ""CreatedBy"",
@@ -21,7 +21,7 @@ namespace DigitalNotes.Infrastructure.Data.Migrations
                                         ""UpdatedAt"",
                                         ""Id""
                                        FROM ""Notes""
-                                      ORDER BY ""CreatedAt"" DESC, ""CreatedBy"";");
+                                      ORDER BY COALESCE(""UpdatedAt"", ""CreatedAt"") DESC;");
             }
             else
             {

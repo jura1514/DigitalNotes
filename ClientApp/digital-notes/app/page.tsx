@@ -23,28 +23,30 @@ export default function Home() {
   const [selectedNote, setSelectedNote] = useState<Note | undefined>(undefined);
 
   //pagination
-  const rowsPerPage = 5;
-  const [startIndex, setStartIndex] = useState(0);
-  const [endIndex, setEndIndex] = useState(rowsPerPage);
+  const pageSize = 5;
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
 
-  const fetchNotes = async (query: string): Promise<void> => {
-    const noteService = new NoteService();
-    const lastRowNumber = await noteService.getLastRowNumber("user2");
-    if (lastRowNumber && lastRowNumber !== 0) {
-      const fetchedNotes = await noteService.getAll(
-        "user2",
-        lastRowNumber,
-        query
-      );
-      setNotes(fetchedNotes);
-    }
+  const fetchNotes = async (
+    pageNumber: number,
+    query: string
+  ): Promise<void> => {
+    const data = await new NoteService().getAll(
+      "user2",
+      pageNumber,
+      pageSize,
+      query
+    );
+    setNotes(data.notes);
+    setTotalPages(Math.ceil(data.totalCount / pageSize));
   };
 
   useEffect(() => {
-    fetchNotes(query);
-  }, [query]);
+    fetchNotes(pageNumber, query);
+  }, [pageNumber, query]);
 
   const onSearch = (event: any) => {
+    setPageNumber(1);
     setQuery(event.target.value);
   };
 
@@ -83,7 +85,7 @@ export default function Home() {
           <div className="flex-grow overflow-y-auto">
             {notes.length > 0 ? (
               <>
-                {notes.slice(startIndex, endIndex).map((note, idx) => {
+                {notes.map((note, idx) => {
                   return (
                     <NoteRow
                       note={note}
@@ -107,13 +109,12 @@ export default function Home() {
                   <PaginationPrevious
                     href="#"
                     className={
-                      startIndex === 0
+                      pageNumber === 1
                         ? "pointer-events-none opacity-50"
                         : undefined
                     }
                     onClick={() => {
-                      setStartIndex(startIndex - rowsPerPage);
-                      setEndIndex(endIndex - rowsPerPage);
+                      setPageNumber(pageNumber - 1);
                     }}
                   />
                 </PaginationItem>
@@ -121,14 +122,13 @@ export default function Home() {
                   <PaginationLink
                     href="#"
                     className={
-                      startIndex === 0
+                      pageNumber === 1
                         ? "pointer-events-none opacity-50"
                         : undefined
                     }
-                    isActive={startIndex === 0}
+                    isActive={pageNumber === 1}
                     onClick={() => {
-                      setStartIndex(0);
-                      setEndIndex(rowsPerPage);
+                      setPageNumber(1);
                     }}
                   >
                     1
@@ -141,13 +141,12 @@ export default function Home() {
                   <PaginationNext
                     href="#"
                     className={
-                      endIndex >= notes.length
+                      pageNumber === totalPages
                         ? "pointer-events-none opacity-50"
                         : undefined
                     }
                     onClick={() => {
-                      setStartIndex(startIndex + rowsPerPage);
-                      setEndIndex(endIndex + rowsPerPage);
+                      setPageNumber(pageNumber + 1);
                     }}
                   />
                 </PaginationItem>
@@ -158,7 +157,7 @@ export default function Home() {
 
         <div className="w-full">
           <NoteForm
-            fetchNotes={() => fetchNotes(query)}
+            fetchNotes={() => fetchNotes(pageNumber, query)}
             selectedNote={selectedNote}
           />
         </div>

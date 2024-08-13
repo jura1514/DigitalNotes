@@ -24,25 +24,19 @@ internal class NotesRepository : INotesRepository
             : _digitalNotesDbContext.Notes.FirstOrDefaultAsync(n => n.Id == id, cancellationToken);
     }
 
-    public Task<int?> GetLastRowNumberAsync(string createdBy, CancellationToken cancellationToken)
+    public Task<int> GetTotalCountAsync(string createdBy, string? noteNameQuery, CancellationToken cancellationToken)
     {
-        return _digitalNotesDbContext.NotesView
-            .Where(nw => nw.CreatedBy == createdBy)
-            .Select(nw => nw.RowNumber)
-            .MaxAsync(cancellationToken);
+        return GetFilteredNotesQuery(createdBy, noteNameQuery)
+            .CountAsync(cancellationToken);
     }
 
-    public Task<List<NoteView>> GetPaginatedAsync(string createdBy, int lastRowNumber, int pageSize,
+    public Task<List<NoteView>> GetPaginatedAsync(string createdBy, int pageNumber, int pageSize,
         string? noteNameQuery, CancellationToken cancellationToken)
     {
-        var query = GetLastCreatedOrUpdatedNotesQuery(createdBy);
-
-        if (!string.IsNullOrEmpty(noteNameQuery))
-            query = query.Where(nw => nw.Title.Contains(noteNameQuery));
-
-        return query
-            .Where(nw => nw.RowNumber <= lastRowNumber)
-            .Take(pageSize).ToListAsync(cancellationToken);
+        return GetFilteredNotesQuery(createdBy, noteNameQuery)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync(cancellationToken);
     }
 
     public Task SaveChangesAsync(CancellationToken cancellationToken)
@@ -50,10 +44,14 @@ internal class NotesRepository : INotesRepository
         return _digitalNotesDbContext.SaveChangesAsync(cancellationToken);
     }
 
-    private IQueryable<NoteView> GetLastCreatedOrUpdatedNotesQuery(string createdBy)
+    private IQueryable<NoteView> GetFilteredNotesQuery(string createdBy, string? containsTitle)
     {
-        return _digitalNotesDbContext.NotesView
-            .Where(nw => nw.CreatedBy == createdBy)
-            .OrderByDescending(nw => nw.UpdatedAt ?? nw.CreatedAt);
+        var query = _digitalNotesDbContext.NotesView
+            .Where(nw => nw.CreatedBy == createdBy);
+
+        if (!string.IsNullOrEmpty(containsTitle))
+            query = query.Where(nw => nw.Title.Contains(containsTitle));
+
+        return query;
     }
 }

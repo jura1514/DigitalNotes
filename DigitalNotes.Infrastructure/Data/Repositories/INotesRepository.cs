@@ -7,9 +7,9 @@ public interface INotesRepository
     Task<Note> AddAsync(Note entity);
     Task<Note?> GetAsync(Guid id, CancellationToken cancellationToken, bool isNoTracking = true);
 
-    Task<int?> GetLastRowNumberAsync(string createdBy, CancellationToken cancellationToken);
+    Task<int> GetTotalCountAsync(string createdBy, string? noteNameQuery, CancellationToken cancellationToken);
 
-    Task<List<NoteView>> GetPaginatedAsync(string createdBy, int lastRowNumber, int pageSize, string? noteNameQuery,
+    Task<List<NoteView>> GetPaginatedAsync(string createdBy, int pageNumber, int pageSize, string? noteNameQuery,
         CancellationToken cancellationToken);
 
     Task SaveChangesAsync(CancellationToken cancellationToken);

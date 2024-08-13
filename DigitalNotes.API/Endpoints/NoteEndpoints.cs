@@ -1,7 +1,6 @@
 using DigitalNotes.API.Extensions;
 using DigitalNotes.Application.Notes.Commands.CreateNote;
 using DigitalNotes.Application.Notes.Commands.UpdateNote;
-using DigitalNotes.Application.Notes.Queries.GetLastRowNumber;
 using DigitalNotes.Application.Notes.Queries.GetNote;
 using DigitalNotes.Application.Notes.Queries.GetNotes;
 using MediatR;
@@ -37,19 +36,19 @@ public static class NoteEndpoints
             .ProducesPut();
 
         // TODO: move?
-        group.MapGet("/{createdBy}/{lastRowNumber:int}",
-                async (ISender sender, string createdBy, int lastRowNumber, string? noteNameQuery,
-                        CancellationToken ct) =>
+        group.MapGet("/{createdBy}",
+                async (ISender sender, string createdBy, CancellationToken ct, string? noteNameQuery,
+                        int pageNumber = 1, int pageSize = 5
+                    ) =>
                     await sender.Send(
                         new GetNotesQuery
-                            {LastRowNumber = lastRowNumber, CreatedBy = createdBy, NoteNameQuery = noteNameQuery}, ct))
+                        {
+                            PageNumber = pageNumber,
+                            PageSize = pageSize,
+                            CreatedBy = createdBy,
+                            NoteNameQuery = noteNameQuery
+                        }, ct))
             .WithName("GetNotes")
-            .ProducesGet<IReadOnlyCollection<NoteDto>>();
-
-        group.MapGet("/{createdBy}",
-                async (ISender sender, string createdBy, CancellationToken ct) =>
-                    await sender.Send(new GetLastRowNumberQuery {CreatedBy = createdBy}, ct))
-            .WithName("GetLastRowNumber")
-            .ProducesGet<int?>();
+            .ProducesGet<NotesDto>();
     }
 }
