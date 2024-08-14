@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, Textarea } from "@/components/index";
+import { Button, Input, Textarea, useNotes } from "@/components/index";
 import {
   Card,
   CardContent,
@@ -18,19 +18,23 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import NoteService from "@/services/noteService";
-import { Note } from "@/services/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-interface NoteFormInput {
-  onFormSubmit: () => Promise<void>;
-  selectedNote?: Note;
-}
-
-function NoteForm({ onFormSubmit, selectedNote }: NoteFormInput) {
+function NoteForm() {
+  const { selectedNote, fetchNotes, pageNumber, setPageNumber } = useNotes();
   const noteService: NoteService = new NoteService();
+
+  const onNoteCreateOrUpdate = async () => {
+    if (pageNumber !== 1) {
+      // will force to fetch notes
+      setPageNumber(1);
+    } else {
+      await fetchNotes();
+    }
+  };
 
   const formSchema = z.object({
     title: z
@@ -77,7 +81,7 @@ function NoteForm({ onFormSubmit, selectedNote }: NoteFormInput) {
       form.reset();
     }
 
-    await onFormSubmit();
+    await onNoteCreateOrUpdate();
   }
 
   return (

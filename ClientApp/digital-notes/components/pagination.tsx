@@ -1,24 +1,19 @@
+"use client"
+
 import {
-    Pagination,
-    PaginationContent,
-    PaginationEllipsis,
-    PaginationItem,
-    PaginationLink,
-    PaginationNext,
-    PaginationPrevious,
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+  useNotes,
 } from "@/components/index";
 
-interface PaginationComponentProps {
-  pageNumber: number;
-  totalPages: number;
-  setPageNumber: (page: number) => void;
-}
+export const PaginationComponent: React.FC = () => {
+  const { pageNumber, totalPages, setPageNumber } = useNotes();
 
-export const PaginationComponent: React.FC<PaginationComponentProps> = ({
-  pageNumber,
-  totalPages,
-  setPageNumber,
-}) => {
   return (
     <Pagination>
       <PaginationContent>

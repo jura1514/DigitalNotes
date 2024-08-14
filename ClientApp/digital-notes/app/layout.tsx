@@ -1,4 +1,6 @@
-import { Header } from "@/components/index";
+import {
+  Header
+} from "@/components/index";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
@@ -22,10 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full bg-gray-50">
       <body
-        className={cn(
-          "bg-background font-sans antialiased",
-          fontSans.variable
-        )}
+        className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
         <Header />
         {children}

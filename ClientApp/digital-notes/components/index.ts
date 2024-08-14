@@ -9,6 +9,7 @@ export {
 } from "@/components/ui/pagination";
 export { Header } from "./header";
 export { NoteList } from "./noteList";
+export { NotesProvider, useNotes } from "./notesProvider";
 export { PaginationComponent } from "./pagination";
 export { SearchBar } from "./searchBar";
 export { Sidebar } from "./sidebar";

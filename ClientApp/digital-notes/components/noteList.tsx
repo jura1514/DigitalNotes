@@ -1,17 +1,10 @@
+"use client"
+
 import { NoteRow } from "@/components/noteRow";
-import { Note } from "@/services/types";
+import { useNotes } from "./notesProvider";
 
-interface NoteListProps {
-  notes: Note[];
-  selectedNote: Note | undefined;
-  setSelectedNote: (note: Note | undefined) => void;
-}
-
-export const NoteList: React.FC<NoteListProps> = ({
-  notes,
-  selectedNote,
-  setSelectedNote,
-}) => {
+export const NoteList: React.FC = () => {
+  const { notes, selectedNote, setSelectedNote } = useNotes();
   return (
     <div className="flex-grow overflow-y-auto">
       {notes.length > 0 ? (

@@ -11,7 +11,6 @@ export interface UpdateNotePayload {
 }
 
 export interface Note {
-  rowNumber: number;
   id: string;
   title: string;
   content: string;
