@@ -2,7 +2,7 @@ import {
   NoteList,
   NotesProvider,
   PaginationComponent,
-  SearchBar
+  SearchBar,
 } from "@/components/index";
 import NoteForm from "@/components/noteForm";
 

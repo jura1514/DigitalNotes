@@ -13,6 +13,10 @@ class NoteService {
     return this.apiClient.put(`${this.noteEndpoint}/${id}`, payload);
   }
 
+  delete(id: string): Promise<void> {
+    return this.apiClient.delete(`${this.noteEndpoint}/?id=${id}`);
+  }
+
   getAll(
     createdBy: string,
     pageNumber: number,

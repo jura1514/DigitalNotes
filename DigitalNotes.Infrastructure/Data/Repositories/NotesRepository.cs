@@ -24,6 +24,11 @@ internal class NotesRepository : INotesRepository
             : _digitalNotesDbContext.Notes.FirstOrDefaultAsync(n => n.Id == id, cancellationToken);
     }
 
+    public Task<int> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return _digitalNotesDbContext.Notes.Where(x => x.Id == id).ExecuteDeleteAsync(cancellationToken);
+    }
+
     public Task<int> GetTotalCountAsync(string createdBy, string? noteNameQuery, CancellationToken cancellationToken)
     {
         return GetFilteredNotesQuery(createdBy, noteNameQuery)

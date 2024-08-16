@@ -1,3 +1,4 @@
-export { default as PlusCircleIcon } from './plusCircle';
-export { default as SearchIcon } from './search';
+export { default as PlusCircleIcon } from "./plusCircle";
+export { default as SearchIcon } from "./search";
+export { default as TrashIcon } from "./trash";
 

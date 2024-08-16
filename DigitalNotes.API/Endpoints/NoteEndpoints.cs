@@ -1,5 +1,6 @@
 using DigitalNotes.API.Extensions;
 using DigitalNotes.Application.Notes.Commands.CreateNote;
+using DigitalNotes.Application.Notes.Commands.DeleteNote;
 using DigitalNotes.Application.Notes.Commands.UpdateNote;
 using DigitalNotes.Application.Notes.Queries.GetNote;
 using DigitalNotes.Application.Notes.Queries.GetNotes;
@@ -34,6 +35,15 @@ public static class NoteEndpoints
                 })
             .WithName("UpdateNote")
             .ProducesPut();
+
+        group.MapDelete("/",
+                async (ISender sender, [AsParameters] DeleteNoteCommand command, CancellationToken ct) =>
+                {
+                    await sender.Send(command, ct);
+                    return Results.NoContent();
+                })
+            .WithName("DeleteNote")
+            .ProducesDelete();
 
         // TODO: move?
         group.MapGet("/{createdBy}",

@@ -43,8 +43,13 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
       pageSize,
       query
     );
-    setNotes(data.notes);
-    setTotalPages(Math.ceil(data.totalCount / pageSize));
+
+    if (pageNumber !== 1 && data.notes.length === 0) {
+      setPageNumber(1);
+    } else {
+      setNotes(data.notes);
+      setTotalPages(Math.ceil(data.totalCount / pageSize));
+    }
   }, [pageNumber, pageSize, query]);
 
   useEffect(() => {

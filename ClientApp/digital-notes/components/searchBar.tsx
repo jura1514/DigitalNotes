@@ -1,11 +1,12 @@
-"use client"
+"use client";
 
-import { PlusCircleIcon, SearchIcon } from "@/components/icons";
+import { SearchIcon } from "@/components/icons";
 import { Input } from "@/components/index";
 import { useNotes } from "./notesProvider";
 
 export const SearchBar: React.FC = () => {
-  const { query, setPageNumber, setQuery, setSelectedNote } = useNotes();
+  const { query, setPageNumber, setQuery, setSelectedNote, selectedNote } =
+    useNotes();
 
   const onSearch = (event: any) => {
     setPageNumber(1);
@@ -13,8 +14,8 @@ export const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="flex-grow-0 flex flex-row p-4">
-      <div className="flex flex-grow relative rounded-md shadow-sm m-2">
+    <div className="flex flex-row p-3">
+      <div className="flex flex-grow relative rounded-md shadow-sm m-1">
         <div className="relative w-full">
           <Input
             type="search"
@@ -24,16 +25,8 @@ export const SearchBar: React.FC = () => {
             className="pl-9"
             onChange={onSearch}
           />
-          <SearchIcon className="absolute left-0 top-0 m-2.5 h-4 w-4 text-muted-foreground" />
+          <SearchIcon className="absolute left-0 top-0 m-2.5 h-5 w-5 text-muted-foreground" />
         </div>
-      </div>
-      <div className="flex flex-grow-0 place-items-center pl-3">
-        <span
-          className="hover:cursor-pointer"
-          onClick={() => setSelectedNote(undefined)}
-        >
-          <PlusCircleIcon className="size-8 h-10 w-10 text-black hover:text-accent-foreground hover:drop-shadow-md" />
-        </span>
       </div>
     </div>
   );

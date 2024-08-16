@@ -1,6 +1,12 @@
 "use client";
 
-import { Button, Input, Textarea, useNotes } from "@/components/index";
+import {
+  Button,
+  Input,
+  NoteActions,
+  Textarea,
+  useNotes,
+} from "@/components/index";
 import {
   Card,
   CardContent,
@@ -85,53 +91,56 @@ function NoteForm() {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{selectedNote ? "Update note" : "Create note"}</CardTitle>
-        <CardDescription>your digital note in one-click.</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form
-            id="create-update-note-form"
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-8"
-          >
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="enter note title" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="content"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Content</FormLabel>
-                  <FormControl>
-                    <Textarea placeholder="enter note content" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </form>
-        </Form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button type="submit" form="create-update-note-form">
-          Submit
-        </Button>
-      </CardFooter>
-    </Card>
+    <>
+      <NoteActions />
+      <Card>
+        <CardHeader>
+          <CardTitle>{selectedNote ? "Update note" : "Create note"}</CardTitle>
+          <CardDescription>your digital note in one-click.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form
+              id="create-update-note-form"
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="space-y-8"
+            >
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="enter note title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="content"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Content</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="enter note content" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button type="submit" form="create-update-note-form">
+            Submit
+          </Button>
+        </CardFooter>
+      </Card>
+    </>
   );
 }
 
