@@ -2,6 +2,7 @@
 
 import NoteService from "@/services/noteService";
 import { Note } from "@/services/types";
+import useLoadingStore, { LoadingStore } from "@/stores/useLoadingStore";
 import React, {
   createContext,
   useCallback,
@@ -27,6 +28,8 @@ type NotesContextType = {
 const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
 export function NotesProvider({ children }: { children: React.ReactNode }) {
+  const setLoading = useLoadingStore((state: LoadingStore) => state.setLoading);
+
   const [query, setQuery] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | undefined>(undefined);
@@ -37,20 +40,25 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const fetchNotes = useCallback(async () => {
-    const data = await new NoteService().getAll(
-      "user2",
-      pageNumber,
-      pageSize,
-      query
-    );
+    try {
+      setLoading(true);
+      const data = await new NoteService().getAll(
+        "user2",
+        pageNumber,
+        pageSize,
+        query
+      );
 
-    if (pageNumber !== 1 && data.notes.length === 0) {
-      setPageNumber(1);
-    } else {
-      setNotes(data.notes);
-      setTotalPages(Math.ceil(data.totalCount / pageSize));
+      if (pageNumber !== 1 && data.notes.length === 0) {
+        setPageNumber(1);
+      } else {
+        setNotes(data.notes);
+        setTotalPages(Math.ceil(data.totalCount / pageSize));
+      }
+    } finally {
+      setLoading(false);
     }
-  }, [pageNumber, pageSize, query]);
+  }, [pageNumber, pageSize, query, setLoading]);
 
   useEffect(() => {
     fetchNotes();

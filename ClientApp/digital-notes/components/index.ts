@@ -8,6 +8,7 @@ export {
     PaginationPrevious
 } from "@/components/ui/pagination";
 export { Header } from "./header";
+export { Loader } from "./loader";
 export { NoteActions } from "./noteActions";
 export { NoteList } from "./noteList";
 export { NotesProvider, useNotes } from "./notesProvider";
