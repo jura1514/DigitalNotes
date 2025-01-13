@@ -15,6 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.Application", "DigitalNotes.Application\DigitalNotes.Application.csproj", "{AF23628F-BFA3-4780-9642-5E934BFF037E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.AppHost", "DigitalNotes.AppHost\DigitalNotes.AppHost.csproj", "{FB68C93C-0501-444B-803A-60EE1F8B6C1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.ServiceDefaults", "DigitalNotes.ServiceDefaults\DigitalNotes.ServiceDefaults.csproj", "{461D3D04-6E37-4D88-ABE9-4D5F3988C073}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.MigrationService", "DigitalNotes.MigrationService\DigitalNotes.MigrationService.csproj", "{CB3ECBBB-B0AE-435F-B685-11F377A17523}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,5 +47,17 @@ Global
 		{AF23628F-BFA3-4780-9642-5E934BFF037E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF23628F-BFA3-4780-9642-5E934BFF037E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF23628F-BFA3-4780-9642-5E934BFF037E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB68C93C-0501-444B-803A-60EE1F8B6C1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB68C93C-0501-444B-803A-60EE1F8B6C1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB68C93C-0501-444B-803A-60EE1F8B6C1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB68C93C-0501-444B-803A-60EE1F8B6C1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{461D3D04-6E37-4D88-ABE9-4D5F3988C073}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461D3D04-6E37-4D88-ABE9-4D5F3988C073}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461D3D04-6E37-4D88-ABE9-4D5F3988C073}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461D3D04-6E37-4D88-ABE9-4D5F3988C073}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

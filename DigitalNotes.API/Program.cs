@@ -1,8 +1,12 @@
 using DigitalNotes.API.Endpoints;
 using DigitalNotes.Application;
 using DigitalNotes.Infrastructure;
+using DigitalNotes.ServiceDefaults;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.AddServiceDefaults();
+builder.AddDataServices();
 
 builder.Services.AddCors(options =>
 {
@@ -25,9 +29,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
-
 builder.Services.AddApplicationServices();
-builder.Services.AddDataServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -44,6 +46,7 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
+app.MapDefaultEndpoints();
 app.MapNoteEndpoints();
 
 app.Run();

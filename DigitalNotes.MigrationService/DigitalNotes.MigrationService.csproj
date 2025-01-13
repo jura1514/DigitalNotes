@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-DigitalNotes.MigrationService-75fe3338-9334-446c-ada9-ad24a495837a</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Aspire.Npgsql.EntityFrameworkCore.PostgreSQL" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DigitalNotes.Infrastructure\DigitalNotes.Infrastructure.csproj" />
+      <ProjectReference Include="..\DigitalNotes.ServiceDefaults\DigitalNotes.ServiceDefaults.csproj" />
+    </ItemGroup>
+</Project>

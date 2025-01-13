@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DigitalNotes.Infrastructure.Data;
 
-internal class DigitalNotesDbContext : DbContext
+public class DigitalNotesDbContext : DbContext
 {
     public DbSet<Note> Notes => Set<Note>();
     public DbSet<NoteView> NotesView => Set<NoteView>();
