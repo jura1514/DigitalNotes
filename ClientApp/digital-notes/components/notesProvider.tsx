@@ -10,6 +10,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { useDebounce } from 'use-debounce';
 
 type NotesContextType = {
   query: string;
@@ -33,9 +34,10 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
   const [query, setQuery] = useState("");
   const [notes, setNotes] = useState<Note[]>([]);
   const [selectedNote, setSelectedNote] = useState<Note | undefined>(undefined);
+  const [searchQuery] = useDebounce(query, 700);
 
   //pagination
-  const pageSize = 5;
+  const pageSize = 7;
   const [pageNumber, setPageNumber] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
 
@@ -46,7 +48,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
         "user2",
         pageNumber,
         pageSize,
-        query
+        searchQuery
       );
 
       if (pageNumber !== 1 && data.notes.length === 0) {
@@ -58,7 +60,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, [pageNumber, pageSize, query, setLoading]);
+  }, [pageNumber, pageSize, searchQuery, setLoading]);
 
   useEffect(() => {
     fetchNotes();

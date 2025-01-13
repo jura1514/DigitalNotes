@@ -1,3 +1,5 @@
+import useToastsStore from "@/stores/useToastsStore";
+
 class ApiClient {
   private baseUrl: string | undefined = process.env.NEXT_PUBLIC_API_HOST;
 
@@ -21,7 +23,12 @@ class ApiClient {
       const response = await fetch(`${this.baseUrl}${endpoint}`, options);
 
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        const body = response.bodyUsed ? await response.json() : undefined;
+        throw new Error(
+          `HTTP error, status: ${response.status}, message: ${
+            body?.title ?? ""
+          }`
+        );
       }
 
       const contentType = response.headers.get("content-type");
@@ -34,6 +41,11 @@ class ApiClient {
     } catch (error: any) {
       const message = error instanceof Error ? error.message : `Unknown error`;
       console.error(`There was an error with your request: ${message}`);
+      useToastsStore.getState().addToast({
+        title: "Error",
+        description: `There was an error with your request: ${message}`,
+        variant: "destructive",
+      });
       throw error;
     }
   }

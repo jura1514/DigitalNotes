@@ -5,7 +5,7 @@ import { Input } from "@/components/index";
 import { useNotes } from "./notesProvider";
 
 export const SearchBar: React.FC = () => {
-  const { query, setPageNumber, setQuery, setSelectedNote, selectedNote } =
+  const { query, setPageNumber, setQuery } =
     useNotes();
 
   const onSearch = (event: any) => {

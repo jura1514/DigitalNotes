@@ -1,4 +1,4 @@
-import { Header, Loader } from "@/components/index";
+import { Header, Loader, NotesProvider, Toaster } from "@/components/index";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
@@ -24,9 +24,14 @@ export default function RootLayout({
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <Loader />
-        <Header />
-        {children}
+        <NotesProvider>
+          <Header />
+          <main>
+            <Loader />
+            {children}
+          </main>
+        </NotesProvider>
+        <Toaster />
       </body>
     </html>
   );
