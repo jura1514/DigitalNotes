@@ -26,6 +26,9 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddProblemDetails();
@@ -43,6 +46,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
+
+// app.UseAuthentication();
+// app.UseAuthorization();
 
 app.UseHttpsRedirection();
 

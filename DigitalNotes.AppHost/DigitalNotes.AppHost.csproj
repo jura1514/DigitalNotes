@@ -19,6 +19,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DigitalNotes.API\DigitalNotes.API.csproj" />
       <ProjectReference Include="..\DigitalNotes.MigrationService\DigitalNotes.MigrationService.csproj" />
+      <ProjectReference Include="..\DigitalNotes.Identity\DigitalNotes.Identity.csproj" />
     </ItemGroup>
 
 </Project>

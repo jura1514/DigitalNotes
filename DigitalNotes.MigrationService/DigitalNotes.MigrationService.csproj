@@ -15,5 +15,6 @@
     <ItemGroup>
       <ProjectReference Include="..\DigitalNotes.Infrastructure\DigitalNotes.Infrastructure.csproj" />
       <ProjectReference Include="..\DigitalNotes.ServiceDefaults\DigitalNotes.ServiceDefaults.csproj" />
+      <ProjectReference Include="..\DigitalNotes.Identity\DigitalNotes.Identity.csproj" />
     </ItemGroup>
 </Project>

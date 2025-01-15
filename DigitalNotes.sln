@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.ServiceDefault
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.MigrationService", "DigitalNotes.MigrationService\DigitalNotes.MigrationService.csproj", "{CB3ECBBB-B0AE-435F-B685-11F377A17523}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DigitalNotes.Identity", "DigitalNotes.Identity\DigitalNotes.Identity.csproj", "{4F7F54FF-87EF-4622-A4BC-141646E63F6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,5 +61,9 @@ Global
 		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CB3ECBBB-B0AE-435F-B685-11F377A17523}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F7F54FF-87EF-4622-A4BC-141646E63F6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F7F54FF-87EF-4622-A4BC-141646E63F6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F7F54FF-87EF-4622-A4BC-141646E63F6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F7F54FF-87EF-4622-A4BC-141646E63F6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

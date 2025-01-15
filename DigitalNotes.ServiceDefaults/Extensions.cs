@@ -31,7 +31,7 @@ public static class Extensions
             // Turn on service discovery by default
             http.AddServiceDiscovery();
         });
-
+        
         // Uncomment the following to restrict the allowed schemes for service discovery.
         // builder.Services.Configure<ServiceDiscoveryOptions>(options =>
         // {
