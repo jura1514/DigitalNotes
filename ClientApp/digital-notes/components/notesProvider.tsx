@@ -32,8 +32,7 @@ const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
 export function NotesProvider({ children }: { children: React.ReactNode }) {
   const { data: session } = useSession();
-  if (!session?.user?.email) throw new Error("User session is not set");
-  const { email } = session.user;
+  const email = session?.user?.email;
 
   const setSession = useSessionStore((state: SessionStore) => state.setSession);
   setSession(session);
@@ -51,6 +50,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
   const [totalPages, setTotalPages] = useState<number>(1);
 
   const fetchNotes = useCallback(async () => {
+    if (!email) return;
     try {
       setLoading(true);
       const data = await new NoteService().getAll(
@@ -72,8 +72,9 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
   }, [pageNumber, pageSize, searchQuery, setLoading, email]);
 
   useEffect(() => {
+    if (!email) return;
     fetchNotes();
-  }, [fetchNotes]);
+  }, [fetchNotes, email]);
 
   const value = {
     query,

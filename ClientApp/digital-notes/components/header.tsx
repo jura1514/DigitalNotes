@@ -15,6 +15,7 @@ import { User } from "next-auth";
 // import { signOut } from "next-auth/react";
 import { signOut } from "@/auth";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { LogOutIcon } from "./icons";
 import { MobileMenu } from "./mobileMenu";
@@ -56,7 +57,16 @@ export const Header = ({ user }: HeaderProps) => {
                 <form
                   action={async () => {
                     "use server";
-                    await signOut();
+
+                    await signOut({ redirect: false });
+
+                    const redirectTo = `${
+                      process.env.AUTH_AUTH0_ISSUER
+                    }/v2/logout?client_id=${
+                      process.env.AUTH_AUTH0_ID
+                    }&returnTo=${encodeURI("http://localhost:3000/")}`;
+
+                    redirect(redirectTo);
                   }}
                 >
                   <button type="submit">Sign Out</button>

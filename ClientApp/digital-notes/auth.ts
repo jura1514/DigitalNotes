@@ -13,7 +13,11 @@ declare module "next-auth" {
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
     Auth0({
-      authorization: { params: { audience: process.env.AUTH_AUTH0_AUDIENCE } },
+      authorization: {
+        params: {
+          audience: process.env.AUTH_AUTH0_AUDIENCE,
+        },
+      },
     }),
   ],
   callbacks: {
