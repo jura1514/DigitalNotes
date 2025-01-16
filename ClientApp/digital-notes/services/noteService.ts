@@ -1,20 +1,19 @@
-import ApiClient from "./apiClient";
+import { deleteRequest, get, post, put } from "./apiClient";
 import { CreateNotePayload, Notes, UpdateNotePayload } from "./types";
 
 class NoteService {
   private noteEndpoint: string = "note";
-  private apiClient: ApiClient = new ApiClient();
 
   create(payload: CreateNotePayload): Promise<string> {
-    return this.apiClient.post(this.noteEndpoint, payload);
+    return post(this.noteEndpoint, payload);
   }
 
   update(id: string, payload: UpdateNotePayload): Promise<void> {
-    return this.apiClient.put(`${this.noteEndpoint}/${id}`, payload);
+    return put(`${this.noteEndpoint}/${id}`, payload);
   }
 
   delete(id: string): Promise<void> {
-    return this.apiClient.delete(`${this.noteEndpoint}/?id=${id}`);
+    return deleteRequest(`${this.noteEndpoint}/?id=${id}`);
   }
 
   getAll(
@@ -28,7 +27,7 @@ class NoteService {
     if (query && query !== "") {
       endpoint += `&noteNameQuery=${query}`;
     }
-    return this.apiClient.get(endpoint);
+    return get(endpoint);
   }
 }
 

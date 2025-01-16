@@ -1,70 +1,63 @@
+import useSessionStore from "@/stores/useSessionStore";
 import useToastsStore from "@/stores/useToastsStore";
+import { Session } from "next-auth";
 
-class ApiClient {
-  private baseUrl: string | undefined = process.env.NEXT_PUBLIC_API_HOST;
+const baseUrl: string | undefined = process.env.NEXT_PUBLIC_API_HOST;
 
-  private async request(
-    method: string,
-    endpoint: string,
-    body?: any | undefined
-  ): Promise<any> {
-    try {
-      const options: any = {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
+async function request(
+  method: string,
+  endpoint: string,
+  body?: any | undefined
+): Promise<any> {
+  try {
+    const session: Session | null = useSessionStore.getState().session;
 
-      if (body) {
-        options.body = JSON.stringify(body);
-      }
+    const options: any = {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.accessToken}`,
+      },
+    };
 
-      const response = await fetch(`${this.baseUrl}${endpoint}`, options);
-
-      if (!response.ok) {
-        const body = response.bodyUsed ? await response.json() : undefined;
-        throw new Error(
-          `HTTP error, status: ${response.status}, message: ${
-            body?.title ?? ""
-          }`
-        );
-      }
-
-      const contentType = response.headers.get("content-type");
-      if (contentType && contentType.indexOf("application/json") !== -1) {
-        const data = await response.json();
-        return data;
-      }
-
-      return response.text();
-    } catch (error: any) {
-      const message = error instanceof Error ? error.message : `Unknown error`;
-      console.error(`There was an error with your request: ${message}`);
-      useToastsStore.getState().addToast({
-        title: "Error",
-        description: `There was an error with your request: ${message}`,
-        variant: "destructive",
-      });
-      throw error;
+    if (body) {
+      options.body = JSON.stringify(body);
     }
-  }
 
-  get(endpoint: string) {
-    return this.request("GET", endpoint);
-  }
+    const response = await fetch(`${baseUrl}${endpoint}`, options);
 
-  post(endpoint: string, body: any) {
-    return this.request("POST", endpoint, body);
-  }
+    if (!response.ok) {
+      const body = response.bodyUsed ? await response.json() : undefined;
+      throw new Error(
+        `HTTP error, status: ${response.status}, message: ${body?.title ?? ""}`
+      );
+    }
 
-  put(endpoint: string, body: any) {
-    return this.request("PUT", endpoint, body);
-  }
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.indexOf("application/json") !== -1) {
+      const data = await response.json();
+      return data;
+    }
 
-  delete(endpoint: string) {
-    return this.request("DELETE", endpoint);
+    return response.text();
+  } catch (error: any) {
+    const message = error instanceof Error ? error.message : `Unknown error`;
+    console.error(`There was an error with your request: ${message}`);
+    useToastsStore.getState().addToast({
+      title: "Error",
+      description: `There was an error with your request: ${message}`,
+      variant: "destructive",
+    });
+    throw error;
   }
 }
 
-export default ApiClient;
+const get = (endpoint: string): Promise<any> => request("GET", endpoint);
+const post = (endpoint: string, body: Record<string, any>): Promise<any> =>
+  request("POST", endpoint, body);
+const put = (endpoint: string, body: Record<string, any>): Promise<any> =>
+  request("PUT", endpoint, body);
+const deleteRequest = (endpoint: string): Promise<any> =>
+  request("DELETE", endpoint);
+
+export { deleteRequest, get, post, put };

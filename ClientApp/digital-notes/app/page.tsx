@@ -1,7 +1,20 @@
-import { NoteList, PaginationComponent, SearchBar } from "@/components/index";
+import {
+  NoteList,
+  PaginationComponent,
+  SearchBar,
+  Button,
+} from "@/components/index";
 import NoteForm from "@/components/noteForm";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
+  if (!session) {
+    redirect("/login");
+  }
+
   return (
     <div className="flex">
       <div

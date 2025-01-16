@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
             .AllowAnyMethod()
             .AllowCredentials()
             .WithOrigins("http://localhost:3000", "http://localhost:8080");
-                
+
         if (builder.Configuration.GetValue<string>("ASPNETCORE_ENVIRONMENT") == "Development")
         {
             // To allow any port origin in localhost
@@ -26,7 +26,12 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.AddAuthentication();
+var domain = $"https://{builder.Configuration["Auth0:Domain"]}/";
+builder.Services.AddAuthentication().AddJwtBearer(options =>
+{
+    options.Authority = domain;
+    options.Audience = builder.Configuration["Auth0:Audience"];
+});
 builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();

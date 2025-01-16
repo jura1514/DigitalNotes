@@ -13,12 +13,10 @@ import {
 } from "@/components/index";
 import NoteService from "@/services/noteService";
 import { DialogTrigger } from "@radix-ui/react-dialog";
-import { useState } from "react";
 import { PlusCircleIcon, TrashIcon } from "./icons";
 
 export function NoteActions() {
   const { selectedNote, fetchNotes, setSelectedNote } = useNotes();
-  const [dialogOpen, setDialogOpen] = useState(false);
   const noteService: NoteService = new NoteService();
 
   const deleteNote = async () => {

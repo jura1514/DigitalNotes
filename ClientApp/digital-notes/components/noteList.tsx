@@ -7,7 +7,7 @@ export const NoteList: React.FC = () => {
   const { notes, selectedNote, setSelectedNote } = useNotes();
   return (
     <div className="flex-grow overflow-y-auto">
-      {notes.length > 0 ? (
+      {notes?.length > 0 ? (
         notes.map((note, idx) => (
           <NoteRow
             note={note}

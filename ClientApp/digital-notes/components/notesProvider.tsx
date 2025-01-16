@@ -3,6 +3,8 @@
 import NoteService from "@/services/noteService";
 import { Note } from "@/services/types";
 import useLoadingStore, { LoadingStore } from "@/stores/useLoadingStore";
+import useSessionStore, { SessionStore } from "@/stores/useSessionStore";
+import { useSession } from "next-auth/react";
 import React, {
   createContext,
   useCallback,
@@ -10,7 +12,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { useDebounce } from 'use-debounce';
+import { useDebounce } from "use-debounce";
 
 type NotesContextType = {
   query: string;
@@ -29,6 +31,13 @@ type NotesContextType = {
 const NotesContext = createContext<NotesContextType | undefined>(undefined);
 
 export function NotesProvider({ children }: { children: React.ReactNode }) {
+  const { data: session } = useSession();
+  if (!session?.user?.email) throw new Error("User session is not set");
+  const { email } = session.user;
+
+  const setSession = useSessionStore((state: SessionStore) => state.setSession);
+  setSession(session);
+
   const setLoading = useLoadingStore((state: LoadingStore) => state.setLoading);
 
   const [query, setQuery] = useState("");
@@ -45,7 +54,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
     try {
       setLoading(true);
       const data = await new NoteService().getAll(
-        "user2",
+        email,
         pageNumber,
         pageSize,
         searchQuery
@@ -60,7 +69,7 @@ export function NotesProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setLoading(false);
     }
-  }, [pageNumber, pageSize, searchQuery, setLoading]);
+  }, [pageNumber, pageSize, searchQuery, setLoading, email]);
 
   useEffect(() => {
     fetchNotes();

@@ -1,6 +1,9 @@
+import { auth } from "@/auth";
 import { Header, Loader, NotesProvider, Toaster } from "@/components/index";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
+import { Session } from "next-auth";
+import { SessionProvider } from "next-auth/react";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 
@@ -14,23 +17,29 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session: Session | null = await auth();
+  // const [user, setUser] = useState<User | undefined>(undefined);
+  // const setSession = useSessionStore((state: SessionStore) => state.setSession);
+
   return (
     <html lang="en" className="h-full bg-gray-50">
       <body
         className={cn("bg-background font-sans antialiased", fontSans.variable)}
       >
-        <NotesProvider>
-          <Header />
-          <main>
-            <Loader />
-            {children}
-          </main>
-        </NotesProvider>
+        <SessionProvider session={session}>
+          <NotesProvider>
+            <Header user={session?.user} />
+            <main>
+              <Loader />
+              {children}
+            </main>
+          </NotesProvider>
+        </SessionProvider>
         <Toaster />
       </body>
     </html>

@@ -28,6 +28,7 @@ export { NotesProvider, useNotes } from "./notesProvider";
 export { PaginationComponent } from "./pagination";
 export { SearchBar } from "./searchBar";
 export { Sidebar } from "./sidebar";
+export { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 export { Button, buttonVariants } from "./ui/button";
 export {
     Card,
@@ -49,6 +50,23 @@ export {
     DialogTitle,
     DialogTrigger
 } from "./ui/dialog";
+export {
+    DropdownMenu,
+    DropdownMenuCheckboxItem,
+    DropdownMenuContent,
+    DropdownMenuGroup,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuPortal,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
+    DropdownMenuSeparator,
+    DropdownMenuShortcut,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger
+} from "./ui/dropdown-menu";
 export {
     Form,
     FormControl,

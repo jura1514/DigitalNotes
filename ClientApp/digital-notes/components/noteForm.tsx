@@ -25,12 +25,17 @@ import {
 } from "@/components/ui/form";
 import NoteService from "@/services/noteService";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 function NoteForm() {
   const { selectedNote, fetchNotes, pageNumber, setPageNumber } = useNotes();
+  const { data: session } = useSession();
+  if (!session?.user?.email) throw new Error("User session is not set");
+  const { email } = session.user;
+
   const noteService: NoteService = new NoteService();
 
   const onNoteCreateOrUpdate = async () => {
@@ -83,7 +88,7 @@ function NoteForm() {
         id: selectedNote.id,
       });
     } else {
-      await noteService.create({ title, content, createdBy: "user2" });
+      await noteService.create({ title, content, createdBy: email });
       form.reset();
     }
 

@@ -12,7 +12,10 @@ public static class NoteEndpoints
 {
     public static void MapNoteEndpoints(this WebApplication app)
     {
-        var group = app.MapGroup("api/note").WithTags("Note").WithOpenApi();
+        var group = app.MapGroup("api/note")
+            .WithTags("Note")
+            .WithOpenApi()
+            .RequireAuthorization();
 
         group.MapPost("/",
                 async (ISender sender, CreateNoteCommand command, CancellationToken ct) =>
@@ -57,7 +60,8 @@ public static class NoteEndpoints
                             PageSize = pageSize,
                             CreatedBy = createdBy,
                             NoteNameQuery = noteNameQuery
-                        }, ct))
+                        }, ct)
+            )
             .WithName("GetNotes")
             .ProducesGet<NotesDto>();
     }
