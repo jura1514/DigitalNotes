@@ -1,29 +1,21 @@
-using DigitalNotes.Domain.Entities;
-using DigitalNotes.Infrastructure.Data.Repositories;
+using DigitalNotes.Domain.NoteAggregate;
+using DigitalNotes.Domain.NoteAggregate.Interfaces;
 
 namespace DigitalNotes.Application.Notes.Commands.CreateNote;
 
 internal class CreateNoteCommandHandler : IRequestHandler<CreateNoteCommand, Guid>
 {
-    private readonly INotesRepository _notesRepository;
+    private readonly INoteRepository _noteRepository;
 
-    public CreateNoteCommandHandler(INotesRepository notesRepository)
+    public CreateNoteCommandHandler(INoteRepository noteRepository)
     {
-        _notesRepository = notesRepository;
+        _noteRepository = noteRepository;
     }
 
-
-    public async Task<Guid> Handle(CreateNoteCommand request, CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateNoteCommand command, CancellationToken cancellationToken)
     {
-        var entity = new Note
-        {
-            Title = request.Title!,
-            Content = request.Content,
-            CreatedAt = DateTime.UtcNow,
-            CreatedBy = request.CreatedBy
-        };
-        await _notesRepository.AddAsync(entity);
-        await _notesRepository.SaveChangesAsync(cancellationToken);
-        return entity.Id;
+        var note = new Note(Guid.NewGuid(), command.Title!, command.Content!, command.CreatedBy);
+        await _noteRepository.SaveAsync(note, cancellationToken);
+        return note.Id;
     }
 }

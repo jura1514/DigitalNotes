@@ -1,4 +1,5 @@
 using DigitalNotes.Domain.Common;
+using DigitalNotes.Infrastructure.Events;
 
 namespace DigitalNotes.Infrastructure.Data.Repositories;
 
@@ -6,10 +7,14 @@ internal class EventDrivenRepository<TEventDrivenAggregate> : IEventDrivenReposi
     where TEventDrivenAggregate : EventDrivenAggregateBase
 {
     private readonly IEventStore _eventStore;
+    private readonly DigitalNotesDbContext _dbContext;
+    private readonly IEventDispatcher _dispatcher;
 
-    public EventDrivenRepository(IEventStore eventStore)
+    public EventDrivenRepository(IEventStore eventStore, DigitalNotesDbContext dbContext, IEventDispatcher dispatcher)
     {
         _eventStore = eventStore;
+        _dbContext = dbContext;
+        _dispatcher = dispatcher;
     }
 
     public async Task<TEventDrivenAggregate> GetByIdAsync(Guid aggregateId,
@@ -32,12 +37,38 @@ internal class EventDrivenRepository<TEventDrivenAggregate> : IEventDrivenReposi
 
     public async Task SaveAsync(TEventDrivenAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        var uncommittedEvents = aggregate.GetUncommittedEvents();
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(
+            async () =>
+            {
+                await using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
 
-        if (!uncommittedEvents.Any())
-            return;
+                try
+                {
+                    var uncommittedEvents = aggregate.GetUncommittedEvents();
 
-        await _eventStore.SaveEventsAsync(aggregate.Id, uncommittedEvents, aggregate.Version, cancellationToken);
-        aggregate.ClearUncommittedEvents();
+                    if (!uncommittedEvents.Any())
+                        return;
+
+                    // TODO: use transactional outbox pattern
+                    await _eventStore.SaveEventsAsync(aggregate.Id, uncommittedEvents, aggregate.Version,
+                        cancellationToken);
+                    await transaction.CommitAsync(cancellationToken);
+
+                    // Publish events to update the read model
+                    foreach (var @event in uncommittedEvents)
+                    {
+                        await _dispatcher.PublishAsync(@event, cancellationToken);
+                    }
+
+                    // clear events since they are committed
+                    aggregate.ClearUncommittedEvents();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync(cancellationToken);
+                    throw;
+                }
+            });
     }
 }

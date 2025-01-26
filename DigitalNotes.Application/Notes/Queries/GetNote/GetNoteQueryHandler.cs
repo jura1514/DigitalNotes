@@ -1,30 +1,28 @@
-using DigitalNotes.Infrastructure.Data.Repositories;
+using DigitalNotes.Domain.NoteAggregate.Interfaces;
 
 namespace DigitalNotes.Application.Notes.Queries.GetNote;
 
 internal class GetNoteQueryHandler : IRequestHandler<GetNoteQuery, NoteDto>
 {
-    private readonly INotesRepository _notesRepository;
+    private readonly INoteReadOnlyRepository _noteReadOnlyRepository;
 
-    public GetNoteQueryHandler(INotesRepository notesRepository)
+    public GetNoteQueryHandler(INoteReadOnlyRepository noteReadOnlyRepository)
     {
-        _notesRepository = notesRepository;
+        _noteReadOnlyRepository = noteReadOnlyRepository;
     }
 
-    public async Task<NoteDto> Handle(GetNoteQuery request, CancellationToken cancellationToken)
-    {
-        var noteEntity = await _notesRepository.GetAsync(request.Id, cancellationToken);
 
-        if (noteEntity is null)
-            throw new ArgumentNullException($"{nameof(noteEntity)}", "Note is not found.");
+    public async Task<NoteDto> Handle(GetNoteQuery query, CancellationToken cancellationToken)
+    {
+        var note = await _noteReadOnlyRepository.GetNoteByIdAsync(query.Id, cancellationToken);
 
         return new NoteDto
         {
-            Id = noteEntity.Id,
-            Title = noteEntity.Title,
-            Content = noteEntity.Content,
-            CreatedAt = noteEntity.CreatedAt,
-            CreatedBy = noteEntity.CreatedBy
+            Id = note.Id,
+            Title = note.Title,
+            Content = note.Content,
+            CreatedAt = note.CreatedAt,
+            CreatedBy = note.CreatedBy
         };
     }
 }

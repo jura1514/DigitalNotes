@@ -1,22 +1,21 @@
 using DigitalNotes.Application.Notes.Queries.GetNote;
-using DigitalNotes.Infrastructure.Data.Repositories;
+using DigitalNotes.Domain.NoteAggregate.Interfaces;
 
 namespace DigitalNotes.Application.Notes.Queries.GetNotes;
 
 public class GetNotesQueryHandler : IRequestHandler<GetNotesQuery, NotesDto>
 {
-    private readonly INotesRepository _notesRepository;
+    private readonly INoteReadOnlyRepository _noteReadOnlyRepository;
 
-    public GetNotesQueryHandler(INotesRepository notesRepository)
+    public GetNotesQueryHandler(INoteReadOnlyRepository noteReadOnlyRepository)
     {
-        _notesRepository = notesRepository;
+        _noteReadOnlyRepository = noteReadOnlyRepository;
     }
 
-    public async Task<NotesDto> Handle(GetNotesQuery request, CancellationToken cancellationToken)
+    public async Task<NotesDto> Handle(GetNotesQuery query, CancellationToken cancellationToken)
     {
-        var notes =
-            await _notesRepository.GetPaginatedAsync(request.CreatedBy, request.PageNumber, request.PageSize,
-                request.NoteNameQuery, cancellationToken);
+        var notes = await _noteReadOnlyRepository.GetPaginatedAsync(query.CreatedBy, query.PageNumber, query.PageSize,
+            query.NoteNameQuery, cancellationToken);
 
         var list = new List<NoteDto>();
         foreach (var noteEntity in notes)
@@ -32,7 +31,7 @@ public class GetNotesQueryHandler : IRequestHandler<GetNotesQuery, NotesDto>
         }
 
         var totalCount =
-            await _notesRepository.GetTotalCountAsync(request.CreatedBy, request.NoteNameQuery, cancellationToken);
+            await _noteReadOnlyRepository.GetTotalCountAsync(query.CreatedBy, query.NoteNameQuery, cancellationToken);
 
         return new NotesDto(totalCount, list);
     }

@@ -1,4 +1,5 @@
 using DigitalNotes.Domain.Common;
+using DigitalNotes.Domain.NoteAggregate.Events;
 
 namespace DigitalNotes.Domain.NoteAggregate;
 
@@ -28,13 +29,13 @@ public class Note : EventDrivenAggregateBase
         Title = title;
         Content = content;
         CreatedBy = createdBy;
-        RegisterEvent(new NoteCreatedEvent(id, title, content, createdBy));
+        RegisterEvent(new NoteCreatedEvent(id, title, content, createdBy, DateTime.UtcNow));
     }
 
     public void Update(string newTitle, string newContent)
     {
         ThrowIfDeleted();
-        RegisterEvent(new NoteUpdatedEvent(Id, newTitle, newContent));
+        RegisterEvent(new NoteUpdatedEvent(Id, newTitle, newContent, DateTime.UtcNow));
     }
 
     public void Delete()
@@ -52,14 +53,14 @@ public class Note : EventDrivenAggregateBase
                 Title = e.Title;
                 Content = e.Content;
                 CreatedBy = e.CreatedBy;
-                CreatedAt = DateTime.UtcNow;
+                CreatedAt = e.CreatedAt;
                 IsDeleted = false;
                 break;
 
             case NoteUpdatedEvent e:
                 Title = e.Title;
                 Content = e.Content;
-                UpdatedAt = DateTime.UtcNow;
+                UpdatedAt = e.UpdatedAt;
                 break;
 
             case NoteDeletedEvent e:

@@ -2,15 +2,15 @@ namespace DigitalNotes.Domain.Common;
 
 public abstract class EventDrivenAggregateBase
 {
-    private readonly List<object> _uncommittedEvents = [];
+    private readonly List<IDomainEvent> _uncommittedEvents = [];
     public Guid Id { get; protected set; }
     public long Version { get; private set; }
 
-    public IReadOnlyList<object> GetUncommittedEvents() => _uncommittedEvents;
+    public IReadOnlyList<IDomainEvent> GetUncommittedEvents() => _uncommittedEvents;
 
     public void ClearUncommittedEvents() => _uncommittedEvents.Clear();
 
-    protected void RegisterEvent(object @event)
+    protected void RegisterEvent(IDomainEvent @event)
     {
         When(@event);
         _uncommittedEvents.Add(@event);

@@ -2,6 +2,7 @@ using DigitalNotes.API.Endpoints;
 using DigitalNotes.Application;
 using DigitalNotes.Infrastructure;
 using DigitalNotes.ServiceDefaults;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,7 +36,18 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 builder.Services.AddAuthorization();
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Description = "JWT token for authorization header",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "jwt"
+    });
+});
 builder.Services.AddProblemDetails();
 builder.Services.AddApplicationServices();
 
@@ -58,6 +70,14 @@ app.UseCors();
 app.UseHttpsRedirection();
 
 app.MapDefaultEndpoints();
-app.MapNoteEndpoints();
+
+if (app.Environment.IsDevelopment())
+{
+    app.MapNoteEndpoints().AllowAnonymous();
+}
+else
+{
+    app.MapNoteEndpoints();
+}
 
 app.Run();

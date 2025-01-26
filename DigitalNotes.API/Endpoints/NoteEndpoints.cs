@@ -10,7 +10,7 @@ namespace DigitalNotes.API.Endpoints;
 
 public static class NoteEndpoints
 {
-    public static void MapNoteEndpoints(this WebApplication app)
+    public static RouteGroupBuilder MapNoteEndpoints(this WebApplication app)
     {
         var group = app.MapGroup("api/note")
             .WithTags("Note")
@@ -64,5 +64,7 @@ public static class NoteEndpoints
             )
             .WithName("GetNotes")
             .ProducesGet<NotesDto>();
+        
+        return group;
     }
 }

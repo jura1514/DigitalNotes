@@ -1,5 +1,4 @@
 using DigitalNotes.Infrastructure.Data.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace DigitalNotes.Infrastructure.Data.Configurations;

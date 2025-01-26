@@ -1,6 +1,6 @@
-namespace DigitalNotes.Domain.Entities;
+namespace DigitalNotes.Domain.NoteAggregate;
 
-public class NoteView
+public class NoteReadOnly
 {
     public required Guid Id { get; init; }
     public required string Title { get; init; }

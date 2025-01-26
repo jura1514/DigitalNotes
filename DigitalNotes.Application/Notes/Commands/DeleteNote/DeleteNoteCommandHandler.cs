@@ -1,18 +1,20 @@
-using DigitalNotes.Infrastructure.Data.Repositories;
+using DigitalNotes.Domain.NoteAggregate.Interfaces;
 
 namespace DigitalNotes.Application.Notes.Commands.DeleteNote;
 
 internal class DeleteNoteCommandHandler : IRequestHandler<DeleteNoteCommand>
 {
-    private readonly INotesRepository _notesRepository;
+    private readonly INoteRepository _noteRepository;
 
-    public DeleteNoteCommandHandler(INotesRepository notesRepository)
+    public DeleteNoteCommandHandler(INoteRepository noteRepository)
     {
-        _notesRepository = notesRepository;
+        _noteRepository = noteRepository;
     }
 
-    public Task Handle(DeleteNoteCommand request, CancellationToken cancellationToken)
+    public async Task Handle(DeleteNoteCommand command, CancellationToken cancellationToken)
     {
-        return _notesRepository.DeleteAsync(request.Id, cancellationToken);
+        var note = await _noteRepository.GetByIdAsync(command.Id, cancellationToken);
+        note.Delete();
+        await _noteRepository.SaveAsync(note, cancellationToken);
     }
 }
