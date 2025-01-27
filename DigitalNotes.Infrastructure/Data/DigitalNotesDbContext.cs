@@ -8,6 +8,7 @@ public class DigitalNotesDbContext : DbContext
 {
     public DbSet<NoteReadOnly> NotesReadOnly => Set<NoteReadOnly>();
     public DbSet<EventStoreEntity> EventStore => Set<EventStoreEntity>();
+    public DbSet<Outbox> Outbox => Set<Outbox>();
 
     public DigitalNotesDbContext()
     {
@@ -20,6 +21,7 @@ public class DigitalNotesDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         new EventStoreConfiguration().Configure(modelBuilder.Entity<EventStoreEntity>());
+        new OutboxConfiguration().Configure(modelBuilder.Entity<Outbox>());
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

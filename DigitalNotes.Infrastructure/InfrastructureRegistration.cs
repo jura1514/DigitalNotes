@@ -1,5 +1,6 @@
 using DigitalNotes.Domain.Common;
 using DigitalNotes.Domain.NoteAggregate.Interfaces;
+using DigitalNotes.Infrastructure.BackgroundJobs;
 using DigitalNotes.Infrastructure.Data;
 using DigitalNotes.Infrastructure.Data.Repositories;
 using DigitalNotes.Infrastructure.Events;
@@ -20,6 +21,8 @@ public static class InfrastructureRegistration
 
         builder.Services.AddScoped<IEventDispatcher, EventDispatcher>();
         builder.Services.AddScoped<IEventHandler<IDomainEvent>, NoteReadOnlyEventHandler>();
+
+        builder.Services.AddHostedService<OutboxProcessor>();
 
         return builder;
     }

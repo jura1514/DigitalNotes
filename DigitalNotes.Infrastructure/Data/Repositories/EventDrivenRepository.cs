@@ -1,5 +1,5 @@
 using DigitalNotes.Domain.Common;
-using DigitalNotes.Infrastructure.Events;
+using DigitalNotes.Infrastructure.Data.Entities;
 
 namespace DigitalNotes.Infrastructure.Data.Repositories;
 
@@ -8,13 +8,11 @@ internal class EventDrivenRepository<TEventDrivenAggregate> : IEventDrivenReposi
 {
     private readonly IEventStore _eventStore;
     private readonly DigitalNotesDbContext _dbContext;
-    private readonly IEventDispatcher _dispatcher;
 
-    public EventDrivenRepository(IEventStore eventStore, DigitalNotesDbContext dbContext, IEventDispatcher dispatcher)
+    public EventDrivenRepository(IEventStore eventStore, DigitalNotesDbContext dbContext)
     {
         _eventStore = eventStore;
         _dbContext = dbContext;
-        _dispatcher = dispatcher;
     }
 
     public async Task<TEventDrivenAggregate> GetByIdAsync(Guid aggregateId,
@@ -50,17 +48,22 @@ internal class EventDrivenRepository<TEventDrivenAggregate> : IEventDrivenReposi
                     if (!uncommittedEvents.Any())
                         return;
 
-                    // TODO: use transactional outbox pattern
-                    await _eventStore.SaveEventsAsync(aggregate.Id, uncommittedEvents, aggregate.Version,
-                        cancellationToken);
-                    await transaction.CommitAsync(cancellationToken);
+                    var addedEvents = await _eventStore.AddEventsAsync(aggregate.Id, uncommittedEvents,
+                        aggregate.Version, cancellationToken);
 
-                    // Publish events to update the read model
-                    foreach (var @event in uncommittedEvents)
+                    var outboxEntries = addedEvents.Select(@event => new Outbox
                     {
-                        await _dispatcher.PublishAsync(@event, cancellationToken);
-                    }
+                        Id = Guid.NewGuid(),
+                        EventType = @event.EventType,
+                        EventData = @event.EventData,
+                        CreatedAt = @event.CreatedAt
+                    }).ToList();
 
+                    await _dbContext.Outbox.AddRangeAsync(outboxEntries, cancellationToken);
+
+                    // commit transaction
+                    await _dbContext.SaveChangesAsync(cancellationToken);
+                    await transaction.CommitAsync(cancellationToken);
                     // clear events since they are committed
                     aggregate.ClearUncommittedEvents();
                 }

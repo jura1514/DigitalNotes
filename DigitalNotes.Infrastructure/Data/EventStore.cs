@@ -11,7 +11,8 @@ internal class EventStore : IEventStore
         _dbContext = dbContext;
     }
 
-    public async Task SaveEventsAsync(Guid aggregateId, IEnumerable<object> events, long? expectedVersion,
+    public async Task<List<EventStoreEntity>> AddEventsAsync(Guid aggregateId, IEnumerable<object> events,
+        long? expectedVersion,
         CancellationToken cancellationToken = default)
     {
         var currentVersion = _dbContext.EventStore
@@ -33,10 +34,10 @@ internal class EventStore : IEventStore
             EventData = JsonSerializer.Serialize(@event),
             Version = currentVersion + index + 1,
             CreatedAt = DateTime.UtcNow
-        });
+        }).ToList();
 
         await _dbContext.EventStore.AddRangeAsync(newEvents, cancellationToken);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        return newEvents;
     }
 
     public async Task<IReadOnlyList<object>> GetEventsAsync(Guid aggregateId,
