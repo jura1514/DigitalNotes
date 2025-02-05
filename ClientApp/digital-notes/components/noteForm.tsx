@@ -24,28 +24,51 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import NoteService from "@/services/noteService";
+import { signalRService } from "@/services/signalRService";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { HubConnection } from "@microsoft/signalr";
 import { useSession } from "next-auth/react";
-import { useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 function NoteForm() {
+  const [connection, setConnection] = useState<HubConnection | undefined>();
   const { selectedNote, fetchNotes, pageNumber, setPageNumber } = useNotes();
   const { data: session } = useSession();
   if (!session?.user?.email) throw new Error("User session is not set");
   const { email } = session.user;
+  const accessToken = session.accessToken;
+  const signalRHubEndpoint = `note/${email}`;
 
   const noteService: NoteService = new NoteService();
 
-  const onNoteCreateOrUpdate = async () => {
+  const onNoteCreateOrUpdate = useCallback(async () => {
     if (pageNumber !== 1) {
       // will force to fetch notes
       setPageNumber(1);
     } else {
       await fetchNotes();
     }
-  };
+  }, [pageNumber, fetchNotes, setPageNumber]);
+
+  useEffect(() => {
+    const connection = signalRService.createConnection(
+      accessToken,
+      signalRHubEndpoint
+    );
+    connection.on("SendNoteReadOnlySynced", async () => {
+      await onNoteCreateOrUpdate();
+    });
+    signalRService.startConnection(signalRHubEndpoint);
+  }, [accessToken, onNoteCreateOrUpdate, pageNumber, signalRHubEndpoint]);
+
+  useEffect(() => {
+    return () => {
+      signalRService.stopConnection(signalRHubEndpoint);
+    };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const formSchema = z.object({
     title: z
@@ -92,7 +115,7 @@ function NoteForm() {
       form.reset();
     }
 
-    await onNoteCreateOrUpdate();
+    // await onNoteCreateOrUpdate();
   }
 
   return (

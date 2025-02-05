@@ -1,3 +1,6 @@
 namespace DigitalNotes.Domain.Common;
 
-public interface IDomainEvent;
+public interface IDomainEvent
+{
+    Guid Id { get; }
+}

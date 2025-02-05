@@ -17,6 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         params: {
           audience: process.env.AUTH_AUTH0_AUDIENCE,
         },
+        scope: "openid email profile"
       },
     }),
   ],

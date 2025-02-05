@@ -1,11 +1,10 @@
+import { auth } from "@/auth";
 import {
   NoteList,
   PaginationComponent,
-  SearchBar,
-  Button,
+  SearchBar
 } from "@/components/index";
 import NoteForm from "@/components/noteForm";
-import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 
 export default async function Home() {

@@ -21,10 +21,11 @@ internal class OutboxProcessor : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
+            using var scope = _serviceProvider.CreateScope();
+            var provider = scope.ServiceProvider;
+
             try
             {
-                using var scope = _serviceProvider.CreateScope();
-                var provider = scope.ServiceProvider;
                 var eventDispatcher = provider.GetRequiredService<IEventDispatcher>();
                 var dbContext = scope.ServiceProvider.GetRequiredService<DigitalNotesDbContext>();
 

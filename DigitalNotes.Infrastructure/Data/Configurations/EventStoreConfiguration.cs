@@ -11,5 +11,6 @@ internal class EventStoreConfiguration : IEntityTypeConfiguration<EventStoreEnti
         builder.Property(e => e.EventData).HasColumnType("jsonb");
         builder.Property(e => e.EventType).IsRequired();
         builder.Property(e => e.CreatedAt).HasDefaultValueSql("NOW()");
+        builder.HasIndex(e => e.Version).IsUnique();
     }
 }

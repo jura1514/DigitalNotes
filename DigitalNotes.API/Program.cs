@@ -1,7 +1,12 @@
 using DigitalNotes.API.Endpoints;
+using DigitalNotes.API.Hubs;
+using DigitalNotes.API.Services;
 using DigitalNotes.Application;
 using DigitalNotes.Infrastructure;
+using DigitalNotes.Infrastructure.Interfaces;
 using DigitalNotes.ServiceDefaults;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +37,21 @@ builder.Services.AddAuthentication().AddJwtBearer(options =>
 {
     options.Authority = domain;
     options.Audience = builder.Configuration["Auth0:Audience"];
+
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            var accessToken = context.Request.Query["access_token"];
+            var path = context.HttpContext.Request.Path;
+            if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
+            {
+                context.Token = accessToken;
+            }
+
+            return Task.CompletedTask;
+        }
+    };
 });
 builder.Services.AddAuthorization();
 
@@ -49,7 +69,10 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 builder.Services.AddProblemDetails();
+builder.Services.AddSignalR();
 builder.Services.AddApplicationServices();
+
+builder.Services.AddScoped<INoteHubNotificationService, NoteHubNotificationService>();
 
 var app = builder.Build();
 
@@ -79,5 +102,7 @@ else
 {
     app.MapNoteEndpoints();
 }
+
+app.MapHub<NoteHub>("/hubs/note/{email}");
 
 app.Run();

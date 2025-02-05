@@ -1,3 +1,5 @@
+using DigitalNotes.Domain.Common;
+using DigitalNotes.Infrastructure.Data.Configurations;
 using DigitalNotes.Infrastructure.Data.Entities;
 
 namespace DigitalNotes.Infrastructure.Data;
@@ -12,18 +14,15 @@ internal class EventStore : IEventStore
     }
 
     public async Task<List<EventStoreEntity>> AddEventsAsync(Guid aggregateId, IEnumerable<object> events,
-        long? expectedVersion,
-        CancellationToken cancellationToken = default)
+        long? expectedVersion, CancellationToken cancellationToken = default)
     {
-        var currentVersion = _dbContext.EventStore
+        var currentVersion = await _dbContext.EventStore
             .Where(e => e.AggregateId == aggregateId)
-            .OrderByDescending(e => e.Version)
-            .Select(e => e.Version)
-            .FirstOrDefault();
+            .MaxAsync(e => e.Version, cancellationToken);
 
         if (currentVersion != expectedVersion)
         {
-            throw new InvalidOperationException("Concurrency conflict: Version mismatch");
+            throw new VersionMismatchException("Concurrency conflict: Version mismatch");
         }
 
         var newEvents = events.Select((@event, index) => new EventStoreEntity
@@ -46,6 +45,7 @@ internal class EventStore : IEventStore
         var eventEntities = await _dbContext.EventStore
             .Where(e => e.AggregateId == aggregateId)
             .OrderBy(e => e.Version)
+            .AsNoTracking()
             .ToListAsync(cancellationToken: cancellationToken);
 
         return GetDeserializedEvents(eventEntities).ToList();

@@ -26,4 +26,8 @@
     <ProjectReference Include="..\DigitalNotes.Domain\DigitalNotes.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Data\Exceptions\" />
+  </ItemGroup>
+
 </Project>

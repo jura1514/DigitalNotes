@@ -2,31 +2,50 @@ using DigitalNotes.Domain.Common;
 using DigitalNotes.Domain.NoteAggregate;
 using DigitalNotes.Domain.NoteAggregate.Events;
 using DigitalNotes.Infrastructure.Data;
+using DigitalNotes.Infrastructure.Interfaces;
 
 namespace DigitalNotes.Infrastructure.Events;
 
 internal class NoteReadOnlyEventHandler : IEventHandler<IDomainEvent>
 {
     private readonly DigitalNotesDbContext _context;
+    private readonly INoteHubNotificationService _noteHubNotificationService;
 
-    public NoteReadOnlyEventHandler(DigitalNotesDbContext context)
+    public NoteReadOnlyEventHandler(DigitalNotesDbContext context,
+        INoteHubNotificationService noteHubNotificationService)
     {
         _context = context;
+        _noteHubNotificationService = noteHubNotificationService;
     }
 
     public async Task Handle(IDomainEvent domainEvent, CancellationToken cancellationToken)
     {
+        string? createdBy = null;
+
         switch (domainEvent)
         {
             case NoteCreatedEvent e:
                 await Handle(e, cancellationToken);
+                createdBy = await SetCreatedBy(e);
                 break;
             case NoteUpdatedEvent e:
                 await Handle(e, cancellationToken);
+                createdBy = await SetCreatedBy(e);
                 break;
             case NoteDeletedEvent e:
+                createdBy = await SetCreatedBy(e);
                 await Handle(e, cancellationToken);
                 break;
+        }
+
+        if (createdBy == null) return;
+        await _noteHubNotificationService.NotifyReadOnlyNoteUpdated(createdBy);
+        return;
+
+        Task<string?> SetCreatedBy(IDomainEvent e)
+        {
+            return _context.NotesReadOnly.Where(n => n.Id == e.Id).Select(n => n.CreatedBy)
+                .SingleOrDefaultAsync(cancellationToken);
         }
     }
 
